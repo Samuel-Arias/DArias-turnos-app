@@ -1,0 +1,115 @@
+---
+import type { CalendarData } from '../types/calendarData'
+
+interface Props {
+  calendarData : CalendarData
+}
+
+const { locale, month, numOfDays, startsOn } = Astro.props.calendarData
+
+const days = [...Array(numOfDays).keys()]
+
+const numOfWeekDays = [...Array(7).keys()]
+const intlWeekDay = new Intl.DateTimeFormat(locale, { weekday: 'long'})
+const weekDaysNames = numOfWeekDays.map(weekDaysKey => {
+  const weekDayName = intlWeekDay.format(new Date(2024, 0, weekDaysKey + 1))
+
+  const dayNameSplit = weekDayName.split('')
+  dayNameSplit.splice(0, 1, dayNameSplit[0].toUpperCase())
+
+  const dayName = dayNameSplit.join('')  
+
+  return dayName
+})
+---
+<article class="monthWrapper">
+  <h1 class="montName">{ month }</h1>
+  <ol>{ weekDaysNames.map((dayName) => <li><p>{ dayName }</p></li>) }</ol>
+  <ol>
+    {
+      days.map(
+        (day, i) => (
+          <li 
+            class={ i === 0 ? 'first-day' : '' }
+            style={ `--first-day-start: ${startsOn}` }
+          >
+            <p>{day + 1}</p>
+          </li>
+        )
+      )
+    }
+  </ol>
+</article>
+
+<script>
+  const dayNameP = document.querySelectorAll('article ol:first-of-type li p')
+  let dayNames: string[] = []
+  dayNameP.forEach((pEl) => {dayNames.push((pEl as HTMLParagraphElement).innerText)})
+
+  const changeDayName = (): void => {
+    if (innerWidth < 765) {
+      dayNameP.forEach(p => {
+        const pEl = p as HTMLParagraphElement
+        let text = pEl.innerText        
+        let newText = text.split('')
+        newText.splice(3)
+
+        pEl.innerText = newText.join('')
+      })
+    } else {
+      dayNameP.forEach((p, i) => (p as HTMLParagraphElement).innerText = dayNames[i])
+    }
+  }
+
+  window.addEventListener("resize", () => changeDayName())
+
+  changeDayName()
+</script>
+
+<style>
+  body {
+    overflow-x: hidden;
+  }
+
+  .monthWrapper {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  .monthWrapper .montName {
+    font-size: 1.875rem;
+    margin-bottom: 1.875rem;
+  }
+
+  .monthWrapper ol {
+    width: 100%;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .monthWrapper ol:first-of-type {
+    margin-bottom: 0.9375rem;
+  }
+
+  .monthWrapper ol:last-of-type {
+    margin-bottom: 3.125rem;
+  }
+
+  .monthWrapper ol:first-of-type li {
+    font-size: 1.125rem;
+  }
+  .monthWrapper ol:last-of-type li {
+    font-size: 2ch;
+    height: 6.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .monthWrapper ol:last-of-type .first-day {
+    grid-column-start: var(--first-day-start, 0);
+  }
+</style>
