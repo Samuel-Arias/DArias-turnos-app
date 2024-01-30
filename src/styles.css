@@ -10,6 +10,10 @@
   font-size: 16px;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
   font-family: 'Poppins', sans-serif;
@@ -20,7 +24,7 @@ p {
   font-family: 'Poppins', sans-serif;
 }
 
-@media screen and (max-width: 763px) {
+@media screen and (width < 769px) {
   :root {
     font-size: 13px;
   }
