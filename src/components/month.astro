@@ -1,5 +1,7 @@
 ---
+import { capitalize } from '../helpers/capitalize'
 import type { CalendarData } from '../types/calendarData'
+import Day from './day.astro'
 
 interface Props {
   calendarData : CalendarData
@@ -14,12 +16,7 @@ const intlWeekDay = new Intl.DateTimeFormat(locale, { weekday: 'long'})
 const weekDaysNames = numOfWeekDays.map(weekDaysKey => {
   const weekDayName = intlWeekDay.format(new Date(2024, 0, weekDaysKey + 1))
 
-  const dayNameSplit = weekDayName.split('')
-  dayNameSplit.splice(0, 1, dayNameSplit[0].toUpperCase())
-
-  const dayName = dayNameSplit.join('')  
-
-  return dayName
+  return capitalize(weekDayName)
 })
 ---
 <article class="monthWrapper">
@@ -27,16 +24,7 @@ const weekDaysNames = numOfWeekDays.map(weekDaysKey => {
   <ol>{ weekDaysNames.map((dayName) => <li><p>{ dayName }</p></li>) }</ol>
   <ol>
     {
-      days.map(
-        (day, i) => (
-          <li 
-            class={ i === 0 ? 'first-day' : '' }
-            style={ `--first-day-start: ${startsOn}` }
-          >
-            <p>{day + 1}</p>
-          </li>
-        )
-      )
+      days.map((day, i) => <Day clase={i === 0 ? 'first-day' : ''} startsOn={startsOn} day={day}/>)
     }
   </ol>
 </article>
@@ -47,7 +35,7 @@ const weekDaysNames = numOfWeekDays.map(weekDaysKey => {
   dayNameP.forEach((pEl) => {dayNames.push((pEl as HTMLParagraphElement).innerText)})
 
   const changeDayName = (): void => {
-    if (innerWidth < 765) {
+    if (innerWidth < 769) {
       dayNameP.forEach(p => {
         const pEl = p as HTMLParagraphElement
         let text = pEl.innerText        
@@ -67,10 +55,6 @@ const weekDaysNames = numOfWeekDays.map(weekDaysKey => {
 </script>
 
 <style>
-  body {
-    overflow-x: hidden;
-  }
-
   .monthWrapper {
     text-align: center;
     max-width: 1200px;
@@ -100,16 +84,5 @@ const weekDaysNames = numOfWeekDays.map(weekDaysKey => {
 
   .monthWrapper ol:first-of-type li {
     font-size: 1.125rem;
-  }
-  .monthWrapper ol:last-of-type li {
-    font-size: 2ch;
-    height: 6.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .monthWrapper ol:last-of-type .first-day {
-    grid-column-start: var(--first-day-start, 0);
   }
 </style>
