@@ -1,0 +1,69 @@
+---
+interface Props {
+  clase: string,
+  startsOn: number,
+  day: number
+}
+
+const {clase, startsOn, day} = Astro.props
+---
+
+<li class={ 'monthDay ' + clase } style={ `--first-day-start: ${startsOn}` }>
+  <p>{ day + 1 }</p>
+</li>
+
+<style>
+  .monthDay {
+    font-size: 2ch;
+    height: 6.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .monthDay.first-day {
+    grid-column-start: var(--first-day-start, 0);
+  }
+
+  .monthDay p {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 9999px;
+    transition: width .2s, height .2s, background-color .2s;
+  }
+
+  .monthDay p.disable {
+    color: #555;
+    transition: none;
+    cursor: default;
+  }
+
+  .monthDay p:hover {
+    width: 3.75rem;
+    height: 3.75rem;
+    background-color: aqua;
+  }
+
+  .monthDay p.disable:hover {
+    width: 3.125rem;
+    height: 3.125rem;
+    background-color: transparent;
+  }
+</style>
+
+<script>
+  const pElements = document.querySelectorAll('.monthDay p');
+
+  pElements.forEach(pEl => {
+    pEl.classList.add('disable')
+    pEl.addEventListener('click', () => {
+      if (pEl.classList.contains('disable')) return
+
+      window.location.href = '/horarios'
+    })
+  })
+</script>
