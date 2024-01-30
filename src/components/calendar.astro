@@ -1,0 +1,44 @@
+---
+import Month from "./month.astro"
+import type { CalendarData } from '../types/calendarData.ts'
+import { capitalize } from '../helpers/capitalize.ts'
+
+interface Props {
+  months: number[],
+  locale: string,
+  year: number
+}
+
+const { months, locale, year } = Astro.props
+
+const intlMonth = new Intl.DateTimeFormat(locale, { month: 'long' })
+
+const monthNames = months.map((monthKey): { monthName:string, startsOn: number, numOfDays: number } => {
+  const monthName = intlMonth.format(new Date(year, monthKey))
+  const startsOn = new Date(year, monthKey, 1).getDay()
+  const numOfDays = new Date(year, monthKey + 1, 0).getDate()
+
+  const newMonthName = capitalize(monthName)
+
+  return {
+    monthName: newMonthName,
+    startsOn,
+    numOfDays
+  }
+})
+---
+
+<section id="calendar">
+  {
+    monthNames.map(({ monthName, startsOn, numOfDays }) => {
+      const calendarData: CalendarData = {
+        locale,
+        month: monthName,
+        numOfDays,
+        startsOn
+      }
+
+      return <Month calendarData={calendarData}/>
+    })
+  }
+</section>

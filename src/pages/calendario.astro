@@ -1,0 +1,18 @@
+---
+import Calendar from "../components/calendar.astro"
+import MainLayout from "../layouts/mainLayout.astro"
+
+const currentYear = new Date().getFullYear()
+const locale = 'es-AR'
+const months = [2,3]
+---
+
+<MainLayout title="Calendario">
+  <h1>Calendario</h1>
+
+  <Calendar
+    months={months}
+    locale={locale}
+    year={currentYear}
+  />  
+</MainLayout>
