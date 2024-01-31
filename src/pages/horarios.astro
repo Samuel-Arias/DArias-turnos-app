@@ -3,27 +3,65 @@ import MainLayout from "../layouts/mainLayout.astro";
 ---
 
 <MainLayout title="horarios">
-  <h1>Horarios del dia</h1>
   <section>
+    <h1>Horarios del dia</h1>
     <ol>
       <li><p>9:00am</p></li>
+      <li>
+        <div>
+          <p class="busy">Ocupado</p>
+          <button>Agendar</button>
+        </div>
+      </li>
       <li><p>10:30am</p></li>
+      <li>
+        <div>
+          <p>Libre</p>
+          <button>Agendar</button>
+        </div>
+      </li>
       <li><p>12:00pm</p></li>
+      <li>
+        <div>
+          <p>Libre</p>
+          <button>Agendar</button>
+        </div>
+      </li>
       <li><p>1:30pm</p></li>
+      <li>
+        <div>
+          <p>Libre</p>
+          <button>Agendar</button>
+        </div>
+      </li>
       <li><p>2:30pm</p></li>
+      <li>
+        <div>
+          <p>Libre</p>
+          <button>Agendar</button>
+        </div>
+      </li>
       <li><p>4.00pm</p></li>
+      <li>
+        <div>
+          <p>Libre</p>
+          <button>Agendar</button>
+        </div>
+      </li>
       <li><p>5:30pm</p></li>
+      <li>
+        <div>
+          <p>Libre</p>
+          <button>Agendar</button>
+        </div>
+      </li>
       <li><p>7:00pm</p></li>
-    </ol>
-    <ol>
-      <li><p>Turno 1</p></li>
-      <li><p>Turno 2</p></li>
-      <li><p>Turno 3</p></li>
-      <li><p>Turno 4</p></li>
-      <li><p>Turno 5</p></li>
-      <li><p>Turno 6</p></li>
-      <li><p>Turno 7</p></li>
-      <li><p>Turno 8</p></li>
+      <li>
+        <div>
+          <p>Libre</p>
+          <button>Agendar</button>
+        </div>
+      </li>
     </ol>
   </section>
 </MainLayout>
@@ -42,6 +80,15 @@ import MainLayout from "../layouts/mainLayout.astro";
 
   const h1 = document.querySelector('h1')
   if (h1) h1.innerText += ` ${dayName} ${day} de ${formatMonthName}`
+
+  const horarios = document.querySelectorAll('.busy')
+  if (horarios) {
+    horarios.forEach(horario => {
+      const brotherBtn = horario.nextElementSibling as HTMLButtonElement
+      brotherBtn.disabled = true
+      brotherBtn.classList.add('disabled')
+    })
+  }
 </script>
 
 <style>
@@ -49,15 +96,86 @@ import MainLayout from "../layouts/mainLayout.astro";
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 5rem 1.25rem 2.5rem;
+  }
+
+  section h1 {
+    position: absolute;
+    top: 0;
+    left: 1.25rem;
   }
 
   ol {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    height: 400px;
+    grid-template-columns: minmax(max-content, 18.75rem) minmax(6.25rem, 37.5rem);
+    grid-template-rows: repeat(8, 6.25rem);
+    justify-content: center;
+    row-gap: 2.5rem;
+  }
+
+  ol li {
+    width: 100%;
+    height: 100%;
+  }
+
+  ol li:nth-child(odd) {
+    background-color: brown;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.375rem;
+    border-radius: 0,125rem;
+  }
+
+  ol li:nth-child(even) {
+    /*background-color: #09f;*/
+  }
+
+  ol li div {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
     justify-items: center;
-    align-content: center;
+    align-items: center;
+  }
+
+  ol li div p {
+    font-size: 1.375rem;
+    color: #083;
+  }
+
+  ol li div p.busy {
+    color: #a00;
+  }
+
+  ol li div button {
+    border: none;
+    outline: none;
+    padding: .625rem 2.5rem;
+    border-radius: .25rem;
+    font-size: 1rem;
+    background-color: transparent;
+    border: 2px solid #EEE;
+    color: #EEE;
+    transition-property: background-color, color;
+    transition-duration: .2s;
+  }
+
+  ol li div button:hover:not(ol li div button.disabled) {
+    background-color: #EEE;
+    color: #111;
+  }
+
+  ol li div button.disabled {
+    border-color: #555;
+    color: #555;
+  }
+
+  @media screen and (width < 768px) {
+    ol {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
