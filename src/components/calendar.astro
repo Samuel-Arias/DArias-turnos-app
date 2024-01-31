@@ -13,7 +13,7 @@ const { months, locale, year } = Astro.props
 
 const intlMonth = new Intl.DateTimeFormat(locale, { month: 'long' })
 
-const monthNames = months.map((monthKey): { monthName:string, startsOn: number, numOfDays: number } => {
+const monthNames = months.map((monthKey): { monthKey: number, monthName:string, startsOn: number, numOfDays: number } => {
   const monthName = intlMonth.format(new Date(year, monthKey))
   const startsOn = new Date(year, monthKey, 1).getDay()
   const numOfDays = new Date(year, monthKey + 1, 0).getDate()
@@ -21,6 +21,7 @@ const monthNames = months.map((monthKey): { monthName:string, startsOn: number, 
   const newMonthName = capitalize(monthName)
 
   return {
+    monthKey,
     monthName: newMonthName,
     startsOn,
     numOfDays
@@ -30,9 +31,10 @@ const monthNames = months.map((monthKey): { monthName:string, startsOn: number, 
 
 <section id="calendar">
   {
-    monthNames.map(({ monthName, startsOn, numOfDays }) => {
+    monthNames.map(({ monthKey, monthName, startsOn, numOfDays }) => {
       const calendarData: CalendarData = {
         locale,
+        monthKey,
         month: monthName,
         numOfDays,
         startsOn

@@ -7,7 +7,7 @@ interface Props {
   calendarData : CalendarData
 }
 
-const { locale, month, numOfDays, startsOn } = Astro.props.calendarData
+const { locale, monthKey, month, numOfDays, startsOn } = Astro.props.calendarData
 
 const days = [...Array(numOfDays).keys()]
 
@@ -24,7 +24,7 @@ const weekDaysNames = numOfWeekDays.map(weekDaysKey => {
   <ol>{ weekDaysNames.map((dayName) => <li><p>{ dayName }</p></li>) }</ol>
   <ol>
     {
-      days.map((day, i) => <Day clase={i === 0 ? 'first-day' : ''} startsOn={startsOn} day={day}/>)
+      days.map((day, i) => <Day clase={i === 0 ? 'first-day' : ''} startsOn={startsOn} day={day} monthKey={monthKey}/>)
     }
   </ol>
 </article>

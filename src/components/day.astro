@@ -2,14 +2,15 @@
 interface Props {
   clase: string,
   startsOn: number,
-  day: number
+  day: number,
+  monthKey: number
 }
 
-const {clase, startsOn, day} = Astro.props
+const {clase, startsOn, day, monthKey} = Astro.props
 ---
 
 <li class={ 'monthDay ' + clase } style={ `--first-day-start: ${startsOn}` }>
-  <p>{ day + 1 }</p>
+  <p data-monthKey={monthKey}>{ day + 1 }</p>
 </li>
 
 <style>
@@ -53,17 +54,23 @@ const {clase, startsOn, day} = Astro.props
     height: 3.125rem;
     background-color: transparent;
   }
+
+  @media screen and (width < 400px) {
+    .monthDay p:hover {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
 </style>
 
 <script>
   const pElements = document.querySelectorAll('.monthDay p');
 
   pElements.forEach(pEl => {
-    pEl.classList.add('disable')
     pEl.addEventListener('click', () => {
       if (pEl.classList.contains('disable')) return
 
-      window.location.href = '/horarios'
+      window.location.href = `/horarios?month=${(pEl as HTMLElement).dataset.monthkey}&day=${(pEl as HTMLParagraphElement).innerText}`
     })
   })
 </script>
