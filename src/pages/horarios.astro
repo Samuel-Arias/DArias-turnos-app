@@ -1,0 +1,63 @@
+---
+import MainLayout from "../layouts/mainLayout.astro";
+---
+
+<MainLayout title="horarios">
+  <h1>Horarios del dia</h1>
+  <section>
+    <ol>
+      <li><p>9:00am</p></li>
+      <li><p>10:30am</p></li>
+      <li><p>12:00pm</p></li>
+      <li><p>1:30pm</p></li>
+      <li><p>2:30pm</p></li>
+      <li><p>4.00pm</p></li>
+      <li><p>5:30pm</p></li>
+      <li><p>7:00pm</p></li>
+    </ol>
+    <ol>
+      <li><p>Turno 1</p></li>
+      <li><p>Turno 2</p></li>
+      <li><p>Turno 3</p></li>
+      <li><p>Turno 4</p></li>
+      <li><p>Turno 5</p></li>
+      <li><p>Turno 6</p></li>
+      <li><p>Turno 7</p></li>
+      <li><p>Turno 8</p></li>
+    </ol>
+  </section>
+</MainLayout>
+
+<script>
+  import { convertParams } from '../helpers/paramsToObj.ts'
+  import { capitalize } from '../helpers/capitalize'
+
+  const params = window.location.search
+  const { month, day } = convertParams(params)
+  const dateOfTurn = new Date(`${new Date().getFullYear()}/${month+1}/${day}`)
+  let [monthName, dayName] = dateOfTurn.toLocaleDateString('es-AR', {month: 'long', weekday: 'long'}).split(' ')
+
+  const formatMonthName = capitalize(monthName)
+  
+
+  const h1 = document.querySelector('h1')
+  if (h1) h1.innerText += ` ${dayName} ${day} de ${formatMonthName}`
+</script>
+
+<style>
+  section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  ol {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    height: 400px;
+    justify-items: center;
+    align-content: center;
+  }
+</style>
