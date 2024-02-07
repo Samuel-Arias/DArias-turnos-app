@@ -1,7 +1,8 @@
 ---
-import Month from "./month.astro"
-import type { CalendarData } from '../types/calendarData.ts'
-import { capitalize } from '../helpers/capitalize.ts'
+import { capitalize } from '@/helpers/capitalize.ts'
+import Month from "@/components/month.astro"
+
+import type { CalendarData } from '@/types/calendarData.ts'
 
 interface Props {
   months: number[],
